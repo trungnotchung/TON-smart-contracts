@@ -2,10 +2,11 @@ import { Address, beginCell, Cell, Contract, contractAddress, ContractProvider, 
 
 export type AddressSaverConfig = {
     manager: Address;
+    employee: Address;
 };
 
 export function addressSaverConfigToCell(config: AddressSaverConfig): Cell {
-    return beginCell().storeAddress(config.manager).storeUint(0, 2).endCell();
+    return beginCell().storeAddress(config.manager).storeAddress(config.employee).endCell();
 }
 
 export class AddressSaver implements Contract {
@@ -21,7 +22,7 @@ export class AddressSaver implements Contract {
         return new AddressSaver(contractAddress(workchain, init), init);
     }
 
-    async sendDeploy(provider: ContractProvider, via: Sender, value: bigint) {
+    async sendDeploy(provider: ContractProvider, via: Sender, value: bigint, ) {
         await provider.internal(via, {
             value,
             sendMode: SendMode.PAY_GAS_SEPARATELY,

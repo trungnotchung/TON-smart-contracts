@@ -14,6 +14,7 @@ describe('AddressSaver', () => {
 
     let blockchain: Blockchain;
     let deployer: SandboxContract<TreasuryContract>;
+    let employee: SandboxContract<TreasuryContract>;
     let addressSaver: SandboxContract<AddressSaver>;
 
     beforeEach(async () => {
@@ -21,7 +22,9 @@ describe('AddressSaver', () => {
 
         deployer = await blockchain.treasury('deployer');
 
-        addressSaver = blockchain.openContract(AddressSaver.createFromConfig({manager: deployer.address}, code));
+        employee = await blockchain.treasury('user');
+
+        addressSaver = blockchain.openContract(AddressSaver.createFromConfig({manager: deployer.address, employee: employee.address}, code));
 
         const deployResult = await addressSaver.sendDeploy(deployer.getSender(), toNano('0.05'));
 
